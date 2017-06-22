@@ -1,0 +1,4 @@
+before_script:
+  - sudo apt-get install blender
+script:
+  ./test/test.sh
