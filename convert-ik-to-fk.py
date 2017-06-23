@@ -1,10 +1,13 @@
-# The goal of this script is to convert an IK rig into an FK rig
+# The goal of this script is to convert an IK rig into an FK rig.
+# We do this by creating a copy of your mesh and new FK rig for that mesh
 #
 # We do this by first duplicating our original rig and removing
 # all of the IKs and constraints from our duplicate.
 #
 # We then bake the visual location and rotation into our FK rig
-
+#
+# Once this is done, the user can export their newly generated
+# mesh and it's newly generated FK rig
 import bpy
 import math
 
@@ -50,17 +53,6 @@ for obj in list(bpy.context.selected_objects):
     elif obj.type == 'MESH':
         fkMesh = obj
 
-# Next we duplicate our fkArmature into an ikArmature. Our FK
-# armature will later track the transforms of our IK armature using
-# visual keyframes that we'll insert
-
-# Deselected the mesh so that only the fkArmature is selected
-fkMesh.select = False
-# Duplicate the selected objects. There is only one, the fkArmature
-bpy.ops.object.duplicate()
-# Now our duplicated fkArmature is selected. This will be our ikArmature
-ikArmature = bpy.context.selected_objects[0]
-
 # We iterate through the bones in the FK armature and remove all existing bone constraints
 bpy.ops.object.mode_set(mode = 'POSE')
 for bone in fkArmature.pose.bones:
@@ -71,7 +63,6 @@ for bone in fkArmature.pose.bones:
 # leaving only our FK bones
 scene.objects.active = fkArmature
 bpy.ops.object.mode_set(mode = 'EDIT')
-ikArmature.select = False
 fkArmature.select = True
 for fkEditBone in bpy.data.armatures[fkArmature.name].edit_bones:
     if fkEditBone.use_deform == False:
@@ -84,7 +75,7 @@ bpy.ops.object.mode_set(mode = 'POSE')
 for fkBone in bpy.context.selected_pose_bones:
     copyTransforms = fkBone.constraints.new('COPY_TRANSFORMS')
     copyTransforms.target = originalArmature
-    # the name of the bone in our ikArmature is the same as the name of our
+    # the name of the bone in our original armature is the same as the name of our
     # fkArmature bone the armature was duplicated. Therefore we us `fkBone.name`
     copyTransforms.subtarget = fkBone.name
 
@@ -110,6 +101,3 @@ bpy.ops.nla.bake(frame_start=keyframes[0], frame_end=keyframes[-1], only_selecte
 
 # Delete the IK armature now that our FK armature is all set up
 bpy.ops.object.mode_set(mode = 'OBJECT')
-scene.objects.unlink(ikArmature)
-ikArmature.user_clear()
-bpy.data.objects.remove(ikArmature)
