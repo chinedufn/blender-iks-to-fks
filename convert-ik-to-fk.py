@@ -1,3 +1,10 @@
+# The goal of this script is to convert an IK rig into an FK rig
+#
+# We do this by first duplicating our original rig and removing
+# all of the IKs and constraints from our duplicate.
+#
+# We then bake the visual location and rotation into our FK rig
+
 import bpy
 import math
 
@@ -76,7 +83,7 @@ for fkEditBone in bpy.data.armatures[fkArmature.name].edit_bones:
 bpy.ops.object.mode_set(mode = 'POSE')
 for fkBone in bpy.context.selected_pose_bones:
     copyTransforms = fkBone.constraints.new('COPY_TRANSFORMS')
-    copyTransforms.target = ikArmature
+    copyTransforms.target = originalArmature
     # the name of the bone in our ikArmature is the same as the name of our
     # fkArmature bone the armature was duplicated. Therefore we us `fkBone.name`
     copyTransforms.subtarget = fkBone.name
@@ -98,19 +105,8 @@ for fcurve in bpy.context.active_object.animation_data.action.fcurves:
           # convert from float to int and insert into our keyframe list
           keyframes.append((math.ceil(x)))
 
-# Now we loop through our keyframes and insert visual keys for each one
-bpy.ops.object.mode_set(mode = 'POSE')
-for fkPoseBone in bpy.context.selected_pose_bones:
-    print(fkPoseBone.name)
-    for keyframe in keyframes:
-        print(keyframe)
-        fkPoseBone.keyframe_insert(data_path='location', frame=keyframe, options={'INSERTKEY_VISUAL'})
-        fkPoseBone.keyframe_insert(data_path='rotation_quaternion', frame=keyframe, options={'INSERTKEY_VISUAL'})
-
-# Remove all constraints from our FK armature now that it has its visual keys
-for fkPoseBone in bpy.context.selected_pose_bones:
-    for constraint in fkPoseBone.constraints:
-        fkPoseBone.constraints.remove(constraint)
+# Now we bake all of our keyframes and remove our constraints
+bpy.ops.nla.bake(frame_start=keyframes[0], frame_end=keyframes[-1], only_selected=True, visual_keying=True, clear_constraints=True, use_current_action=True, bake_types={'POSE'})
 
 # Delete the IK armature now that our FK armature is all set up
 bpy.ops.object.mode_set(mode = 'OBJECT')
