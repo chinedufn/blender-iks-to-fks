@@ -4,8 +4,7 @@ blender-iks-to-fks [![Build Status](https://travis-ci.org/chinedufn/blender-iks-
 > A Blender Addon that takes a mesh and armature that use IKs and other non-deformation bones and
 creates a new mesh and armature that uses only FK bones.
 
-This Blender Addon is donationware, so please donate via [my PayPal](paypal.me/chinedufn) if you've found this helpful!
-
+This Blender Addon is donationware, so please [donate via PayPal](https://paypal.me/chinedufn) if you've found this helpful!
 
 ![example gif](screenshots/iks-to-fks.gif)
 
@@ -28,7 +27,7 @@ Go to your user preferences in Blender
 
 Install the Blender Addon file that you just downloaded
 
-![install addon](screenshots/user-preferences.png)
+![install addon](screenshots/install-addon.png)
 
 Save the Addon so that it is enabled the next time you use Blender
 
