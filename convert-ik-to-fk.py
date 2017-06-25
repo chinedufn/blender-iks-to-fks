@@ -74,6 +74,10 @@ class ConvertIKToFK(bpy.types.Operator):
             # elif obj.type == 'MESH':
                 # fkMesh = obj
 
+        # Loop through all pose bones and make sure they are selected. Some of our commands require that the bones be selected
+        for poseBone in fkArmature.pose.bones:
+            poseBone.bone.select = True
+
         # We iterate through the bones in the FK armature and remove all existing bone constraints
         bpy.ops.object.mode_set(mode = 'POSE')
         for bone in fkArmature.pose.bones:
@@ -87,7 +91,6 @@ class ConvertIKToFK(bpy.types.Operator):
         fkArmature.select = True
         for fkEditBone in bpy.data.armatures[fkArmature.name].edit_bones:
             if fkEditBone.use_deform == False:
-                print(fkEditBone.name)
                 bpy.data.armatures[fkArmature.name].edit_bones.remove(fkEditBone)
 
         # Next we make our FK bones copy the transforms of their IK rig counterparts
@@ -120,7 +123,15 @@ class ConvertIKToFK(bpy.types.Operator):
         # Now we bake all of our keyframes and remove our constraints
         bpy.ops.nla.bake(frame_start=keyframes[0], frame_end=keyframes[-1], only_selected=True, visual_keying=True, clear_constraints=True, use_current_action=True, bake_types={'POSE'})
 
-        # Delete the IK armature now that our FK armature is all set up
+        # Bake adds extra keyframes, so we delete any keyframes that did not previously exist
+        bpy.ops.object.mode_set(mode = 'POSE')
+        # Delete generated keyframes that did not exist before this script
+        for frame in range(keyframes[0], keyframes[-1]):
+            if frame not in keyframes:
+                bpy.context.scene.frame_set(frame)
+                bpy.ops.anim.keyframe_delete(type='LocRotScale')
+
+        # Go to Object mode so that they can export their new model
         bpy.ops.object.mode_set(mode = 'OBJECT')
 
         return {'FINISHED'}
