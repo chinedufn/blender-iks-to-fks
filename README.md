@@ -4,8 +4,6 @@ blender-iks-to-fks [![Build Status](https://travis-ci.org/chinedufn/blender-iks-
 > A Blender Addon that takes a mesh and armature that use IKs and other non-deformation bones and
 creates a new mesh and armature that uses only FK bones.
 
-This Blender Addon is donationware, so please [donate via PayPal](https://paypal.me/chinedufn) if you've found this helpful!
-
 ![example gif](screenshots/iks-to-fks.gif)
 
 ## Background / Initial motivation
@@ -16,6 +14,10 @@ The process was manual, tedious and very error prone. To the point where I would
 This script automates the IK / Constraint bones -> FK bones conversion process.
 
 It does this by generating a new mesh and FK rig that copy the animations of your original mesh and rig.
+
+---
+
+This Blender Addon is donationware, so please [donate via PayPal](https://paypal.me/chinedufn) if you've found this helpful!
 
 ## Install
 
