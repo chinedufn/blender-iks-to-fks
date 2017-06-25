@@ -19,7 +19,7 @@ It does this by generating a new mesh and FK rig that copy the animations of you
 
 ## Install
 
-[Download the Addon file](https://github.com/chinedufn/blender-iks-to-fks/releases/download/1.0.0/convert-ik-to-fk.py)
+[Download the Addon file](https://github.com/chinedufn/blender-iks-to-fks/releases/download/1.1.0/convert-ik-to-fk.py)
 
 Go to your user preferences in Blender
 
