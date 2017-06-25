@@ -19,6 +19,11 @@ It does this by generating a new mesh and FK rig that copy the animations of you
 
 This Blender Addon is donationware, so please [donate via PayPal](https://paypal.me/chinedufn) if you've found this helpful!
 
+## Benefits
+
+- Unlike `Bake Action`, `blender-iks-to-fks` **does not create any additional keyframes**
+- Your original mesh remains unmodified, preventing you from accidentally losing / overwriting your work
+
 ## Install
 
 [Download the Addon file](https://github.com/chinedufn/blender-iks-to-fks/releases/download/1.1.0/convert-ik-to-fk.py)
