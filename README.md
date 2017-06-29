@@ -17,6 +17,10 @@ It does this by generating a new mesh and FK rig that copy the animations of you
 
 ---
 
+I wrote a [reddit comment attempting to explain IK vs FK at a five year old level](https://www.reddit.com/r/blender/comments/6k4dou/open_source_blender_addon_to_automatically/djjaqcc/).
+
+---
+
 This Blender Addon is donationware, so please [donate via PayPal](https://paypal.me/chinedufn) if you've found this helpful!
 
 ## Benefits
