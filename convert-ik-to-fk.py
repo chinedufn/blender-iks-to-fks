@@ -55,6 +55,10 @@ class ConvertIKToFK(bpy.types.Operator):
             print('You must select one mesh and one armature. You\'re missing a mesh')
             return {'FINISHED'}
 
+        # This ensures that the order that the mesh and armature are selected does
+        # not cause any issues
+        bpy.context.scene.objects.active = originalArmature
+
         # TODO: Check here that mesh is parented to armature
 
         # Duplicate the selected armature and mesh
