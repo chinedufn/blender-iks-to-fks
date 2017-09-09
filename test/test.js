@@ -40,7 +40,7 @@ test('Old and new armature have same animations', function (t) {
 
   // Render our model without converting it into FK
   cp.exec(
-    `blender -b ${testBlendFile} --render-output ./before --render-frame 10 --render-format PNG`,
+    `blender -b ${testBlendFile} --render-output ./before --render-frame 10 --render-format PNG -noaudio`,
     function (err, stdout, stderr) {
       if (err) { throw err }
 
@@ -51,7 +51,7 @@ test('Old and new armature have same animations', function (t) {
 
   // Render our model after converting it into FK
   cp.exec(
-    `blender -b ${testBlendFile} --python ${runAddon} --render-output ./after --render-frame 10 --render-format PNG`,
+    `blender -b ${testBlendFile} --python ${runAddon} --render-output ./after --render-frame 10 --render-format PNG -noaudio`,
     function (err, stdout, stderr) {
       if (err) { throw err }
 
