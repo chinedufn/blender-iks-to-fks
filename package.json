@@ -38,8 +38,10 @@
   },
   "homepage": "https://github.com/chinedufn/blender-iks-to-fks#readme",
   "devDependencies": {
-    "minimist": "^1.2.0",
     "standard": "^10.0.3",
     "tape": "^4.8.0"
+  },
+  "dependencies": {
+    "minimist": "^1.2.0"
   }
 }
