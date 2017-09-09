@@ -1,4 +1,4 @@
-blender-iks-to-fks [![Build Status](https://travis-ci.org/chinedufn/blender-iks-to-fks.svg?branch=master)](https://travis-ci.org/chinedufn/blender-iks-to-fks)
+blender-iks-to-fks [![npm version](https://badge.fury.io/js/blender-iks-to-fks.svg)](http://badge.fury.io/js/blender-iks-to-fks) [![Build Status](https://travis-ci.org/chinedufn/blender-iks-to-fks.svg?branch=master)](https://travis-ci.org/chinedufn/blender-iks-to-fks)
 ===========
 
 > A Blender Addon that takes a mesh and armature that use IKs and other non-deformation bones and
@@ -30,41 +30,46 @@ This Blender Addon is donationware, so please [donate via PayPal](https://paypal
 
 ## Install
 
-[Download the Addon file](https://github.com/chinedufn/blender-iks-to-fks/releases/download/1.2.0/convert-ik-to-fk.py)
+There are two ways to install the addon. By running a script, or by manually downloading and adding it into Blender
 
-Go to your user preferences in Blender
+### Install via script
 
-![user preferences](screenshots/user-preferences.png)
+This method requires that Blender is added to your $PATH
 
-Install the Blender Addon file that you just downloaded
+```sh
+npm install -g blender-iks-to-fks && ik2fk --install-blender
+```
 
-![install addon](screenshots/install-addon.png)
+### Manual Download Instructions
 
-Save the Addon so that it is enabled the next time you use Blender
-
-![save settings](screenshots/save-settings.png)
+[Manual installation instructions](manual-installation-instructions.md)
 
 ## Usage
+
+### In Blender Window:
 
 1. Select your mesh and it's armature in Object Mode
 2. Press Space
 3. Search for 'Convert IKs to FKs' and select it
 4. You should now have a new mesh and armature that use FKs
 
+### Via Blender CLI
+
+You can run this addon via the Blender CLI as part of an automated conversion process. Here's how:
+
+```sh
+blender my-blender-file.blend --python `ik2fk`
+```
+
+## Have an idea? Confused?
+
+Open an issue and lets sort it out!
+
 ## Was this helpful?
 
 Were you lost trying to find a way to convert your bones, but now you're found?
 
 [![Support](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/chinedufn)
-
-## TODO
-
-- [x] Plan out the implementation and look up all of the Blender APIs that we'll need
-- [ ] Unit test by using `blender` CLI to run our script then save a photo of a rendering. Make sure photo matches our expected results that we've manually verified once.
-- [z] Write the script
-- [z] Write installation instructions
-- [z] Write usage instructions
-- [z] Add screenshot to README that illustrates what this solves
 
 ## License
 

@@ -1,4 +1,14 @@
-# 1.2.0
+## 1.3.0
+
+- Allow addon to be installed via npm `npm install -g blender-iks-to-fks`
+- Allow addon to be installed via command line: `ik2fk --install-blender`
+- Allow addon to be run via command line
+    ```
+    blender my-file.blend --python `ik2fk`
+    ```
+- Add unit tests
+
+## 1.2.0
 
 - Previously your newly generated model would only be keyframed for the action that was active
 when you ran `blender-iks-to-fks`. Now we loop through each action and bake all of your keyframes
