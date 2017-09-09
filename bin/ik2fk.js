@@ -51,7 +51,7 @@ if (argv.i || argv['install-blender']) {
   process.exit(0)
 }
 
-// If none of our arguments were passed in we return the filename of the Blender addon
+// If none of our arguments were passed in we return the filename of the Blender addon runner runner runner runner runner
 console.log(
-  path.resolve(__dirname, '../convert-ik-to-fk.py')
+  path.resolve(__dirname, '../run-addon.py')
 )
