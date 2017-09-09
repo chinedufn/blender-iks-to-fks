@@ -148,7 +148,18 @@ class ConvertIKToFK(bpy.types.Operator):
             for frame in range(keyframes[0], keyframes[-1]):
                 if frame not in keyframes:
                     bpy.context.scene.frame_set(frame)
-                    bpy.ops.anim.keyframe_delete(type='LocRotScale')
+
+                    # We set up the proper context to override the default for keyframe_delete.
+                    # This fixes an issue where the `poll()` function on keyframe_delete was failing when run via blender CLI.
+                    # In short.. we're just making sure that `keyframe_delete` uses the correct context
+                    # When we run this addon from the command line.
+                    screen = bpy.context.window.screen
+                    for area in screen.areas:
+                        if area.type == 'VIEW_3D':
+                            for region in area.regions:
+                                if region.type == 'WINDOW':
+                                    override = {'window': bpy.context.window, 'screen': screen, 'area': area, 'region': region, 'scene': bpy.context.scene, 'active_object': bpy.context.active_object, 'active_pose_bone': bpy.context.active_pose_bone, 'selected_pose_bones': bpy.context.selected_pose_bones}
+                                    bpy.ops.anim.keyframe_delete(override, type='LocRotScale')
 
         # Go to Object mode so that they can export their new model
         bpy.ops.object.mode_set(mode = 'OBJECT')
