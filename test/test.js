@@ -3,7 +3,11 @@ var cp = require('child_process')
 var path = require('path')
 var fs = require('fs')
 
-var testBlendFile = path.resolve(__dirname, './leg.blend')
+// A leg with IKs
+var legBlendFile = path.resolve(__dirname, './leg.blend')
+// A file with an unselected mesh and parent armature
+var unselectedBlendFile = path.resolve(__dirname, './unselected.blend')
+
 var runAddon = path.resolve(__dirname, '../run-addon.py')
 
 // Our test blender file has 3 objects - a camera, mesh and armature
@@ -17,7 +21,7 @@ test('Create a second armature', function (t) {
   // Run our addon and then verify that the number of objects went from 3 -> 5 because a new armature
   // and mesh were created
   cp.exec(
-    `blender ${testBlendFile} --background --python ${runAddon} --python ${printNumObjectsScript}`,
+    `blender ${legBlendFile} --background --python ${runAddon} --python ${printNumObjectsScript}`,
     function (err, stdout, stderr) {
       if (err) { throw err }
 
@@ -42,7 +46,7 @@ test('Old and new armature have same animations', function (t) {
 
   // Render our model without converting it into FK
   cp.exec(
-    `blender -b ${testBlendFile} --render-output ${beforeFile} --render-frame 10 --render-format PNG -noaudio`,
+    `blender -b ${legBlendFile} --render-output ${beforeFile} --render-frame 10 --render-format PNG -noaudio`,
     function (err, stdout, stderr) {
       if (err) { throw err }
 
@@ -53,7 +57,7 @@ test('Old and new armature have same animations', function (t) {
 
   // Render our model after converting it into FK
   cp.exec(
-    `blender -b ${testBlendFile} --python ${runAddon} --render-output ${afterFile} --render-frame 10 --render-format PNG -noaudio`,
+    `blender -b ${legBlendFile} --python ${runAddon} --render-output ${afterFile} --render-frame 10 --render-format PNG -noaudio`,
     function (err, stdout, stderr) {
       if (err) { throw err }
 
@@ -89,4 +93,27 @@ test('Old and new armature have same animations', function (t) {
       })
     }
   }
+})
+
+// If you have not selected a mesh that has an armature we will use the first mesh that we find that has an armature
+// This makes everything work right out of the box for blender files that only have one armature and mesh.
+// TODO: We'll still need to figure out how to best handle files with multiple mesh's / armatures
+test('Automatically selects mesh if none selected', function (t) {
+  t.plan(1)
+
+  var printNumObjectsScript = path.resolve(__dirname, './helper-python-scripts/print-num-objects-to-stdout.py')
+
+  // Run our addon and then verify that the number of objects went from 3 -> 5 because a new armature
+  // and mesh were created
+  cp.exec(
+    `blender ${unselectedBlendFile} --background --python ${runAddon} --python ${printNumObjectsScript}`,
+    function (err, stdout, stderr) {
+      if (err) { throw err }
+
+      t.ok(
+        stdout.indexOf('The number of objects is: 5') > -1, 'Mesh and armature were automatically detected'
+      )
+      t.end()
+    }
+  )
 })

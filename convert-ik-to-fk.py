@@ -38,29 +38,43 @@ class ConvertIKToFK(bpy.types.Operator):
         originalArmature = None
         originalMesh = None
 
-        # Make sure that we have two objects selected
-        bpy.ops.object.mode_set(mode = 'OBJECT')
-        if (len(list(bpy.context.selected_objects)) != 2):
-            print('You must select one armature and one mesh.')
-
-        # Make sure that our two objects are one mesh and one armature
-        for obj in list(bpy.context.selected_objects):
-            if obj.type == 'ARMATURE':
-                originalArmature = obj
-            elif obj.type == 'MESH':
+        # We first check if any of the already selected objects is a mesh that has a parent armature.
+        # If so we use that mesh and armature
+        for obj in bpy.context.selected_objects:
+            if obj.type == 'MESH' and obj.parent and obj.parent.type == 'ARMATURE':
                 originalMesh = obj
+                originalArmature = obj.parent
+                break
 
-        if originalArmature == None:
-            print('You must select one armature and one mesh. You\'re missing an armature')
-            return {'FINISHED'}
-
+        # If no mesh is selected, we look for the first object that we can find that has an armature as a parent
         if originalMesh == None:
-            print('You must select one mesh and one armature. You\'re missing a mesh')
-            return {'FINISHED'}
+            for obj in bpy.data.objects:
+                if obj.type == 'MESH' and obj.parent and obj.parent.type == 'ARMATURE':
+                    originalMesh = obj
+                    originalArmature = obj.parent
+                    break
+
+        # Deselect all objects and then select ONLY our mesh and armature
+        for obj in bpy.context.selected_objects:
+            obj.select = False
+
+        # Select our mesh and armature so that we can duplicate them later
+        if originalMesh != None and originalArmature != None:
+            originalMesh.select = True
+            originalArmature.select = True
+
+
+        # An active object is required in order to change into object mode
+        if originalArmature != None:
+          bpy.context.scene.objects.active = originalArmature
+          bpy.ops.object.mode_set(mode = 'OBJECT')
+
+        # Make sure that we have two objects selected (our mesh and armature)
+        if (len(list(bpy.context.selected_objects)) != 2):
+            print('It doesn\'t seem like your file has a mesh with a parent armature')
 
         # This ensures that the order that the mesh and armature are selected does
         # not cause any issues
-        bpy.context.scene.objects.active = originalArmature
 
         # TODO: Check here that mesh is parented to armature
 

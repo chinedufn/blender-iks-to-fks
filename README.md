@@ -48,7 +48,7 @@ npm install -g blender-iks-to-fks && ik2fk --install-blender
 
 ### In Blender Window:
 
-1. Select your mesh and it's armature in Object Mode
+1. Select your mesh in Object Mode
 2. Press Space
 3. Search for 'Convert IKs to FKs' and select it
 4. You should now have a new mesh and armature that use FKs

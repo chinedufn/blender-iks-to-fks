@@ -1,3 +1,7 @@
+## 1.3.4
+
+- If you have not selected a mesh we will automatically select the first mesh that we find that has an armature
+
 ## 1.3.0
 
 - Allow addon to be installed via npm `npm install -g blender-iks-to-fks`
