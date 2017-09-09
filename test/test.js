@@ -81,8 +81,8 @@ test('Old and new armature have same animations', function (t) {
         var rootSquareMeanError = Number(stderr.split('(')[1].split(')')[0])
 
         // Delete our test renderings
-        fs.unlinkSync('before0010.png')
-        fs.unlinkSync('after0010.png')
+        fs.unlinkSync(`${beforeFile}0010.png`)
+        fs.unlinkSync(`${afterFile}0010.png`)
 
         t.ok(rootSquareMeanError < 0.0002, 'New mesh and armature have the same animations as the old mesh and armature')
         t.end()
