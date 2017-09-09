@@ -4,7 +4,7 @@
   "description": "A Blender script that takes a mesh and armature that use IKs and other non-deformation bones and creates a new mesh and armature that uses only FK bones",
   "main": "bin/ik2fk.js",
   "bin": {
-    "ik2fk": "node ./bin/ik2fk.js"
+    "ik2fk": "./bin/ik2fk.js"
   },
   "directories": {
     "test": "test"
