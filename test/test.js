@@ -37,10 +37,12 @@ test('Old and new armature have same animations', function (t) {
   t.plan(1)
 
   var bothImagesRendered
+  var beforeFile = path.resolve(__dirname, './before')
+  var afterFile = path.resolve(__dirname, './after')
 
   // Render our model without converting it into FK
   cp.exec(
-    `blender -b ${testBlendFile} --render-output ./before --render-frame 10 --render-format PNG -noaudio`,
+    `blender -b ${testBlendFile} --render-output ${beforeFile} --render-frame 10 --render-format PNG -noaudio`,
     function (err, stdout, stderr) {
       if (err) { throw err }
 
@@ -51,7 +53,7 @@ test('Old and new armature have same animations', function (t) {
 
   // Render our model after converting it into FK
   cp.exec(
-    `blender -b ${testBlendFile} --python ${runAddon} --render-output ./after --render-frame 10 --render-format PNG -noaudio`,
+    `blender -b ${testBlendFile} --python ${runAddon} --render-output ${afterFile} --render-frame 10 --render-format PNG -noaudio`,
     function (err, stdout, stderr) {
       if (err) { throw err }
 
@@ -70,7 +72,7 @@ test('Old and new armature have same animations', function (t) {
     t.plan(1)
 
     if (bothImagesRendered) {
-      cp.exec('compare -metric RMSE before0010.png after0010.png /dev/null', function (_, stdout, stderr) {
+      cp.exec(`compare -metric RMSE ${beforeFile}0010.png ${afterFile}0010.png /dev/null`, function (_, stdout, stderr) {
         // Compare will write the comparison to stderr. We parse their
         // It looks like this:
         //  7.31518 (0.000111623)
