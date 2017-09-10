@@ -30,14 +30,18 @@ This Blender Addon is donationware, so please [donate via PayPal](https://paypal
 
 ## Install
 
-There are two ways to install the addon. By running a script, or by manually downloading and adding it into Blender
+There are two ways to install the addon into Blender.
+
+1. By running a script
+2. OR by manually downloading and adding it into Blender
 
 ### Install via script
 
 This method requires that Blender is added to your $PATH
 
 ```sh
-npm install -g blender-iks-to-fks && ik2fk --install-blender
+# This installs the script in Blender and saves it to your user preferences
+npm install -g blender-iks-to-fks && ik2fk --install
 ```
 
 ### Manual Download Instructions
@@ -59,6 +63,32 @@ You can run this addon via the Blender CLI as part of an automated conversion pr
 
 ```sh
 blender my-blender-file.blend --python `ik2fk`
+```
+
+### ik2fk CLI
+
+```sh
+Usage
+
+  $ ik2fk
+    # Returns the filename of the Blender addon. Useful for running the addon via CLI
+    # i.e.
+    #   blender my-model.blend --python `ik2fk`
+
+  $ ik2fk --help
+    # Prints some help text on how to use this command
+
+  $ ik2fk --install
+    # Installs and enables the addon and then saves it to your Blender user preferences
+    # Note that you must have Blender in your $PATH in order for this command to work
+    #
+    # You can also follow instructions to install it manually https://github.com/chinedufn/blender-iks-to-fks#install
+
+Options
+
+  -h, --help            -> Get help text about using the blender-iks-to-fks CLI
+
+  -i, --install-blender -> Install the addon and save it in your Blender
 ```
 
 ## Have an idea? Confused?

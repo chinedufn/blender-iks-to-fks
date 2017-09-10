@@ -19,7 +19,7 @@ Usage
   $ ik2fk --help
     # Prints some help text on how to use this command
 
-  $ ik2fk --install-blender
+  $ ik2fk --install
     # Installs and enables the addon and then saves it to your Blender user preferences
     # Note that you must have Blender in your $PATH in order for this command to work
     #
@@ -29,7 +29,7 @@ Options
 
   -h, --help            -> Get help text about using the blender-iks-to-fks CLI
 
-  -i, --install-blender -> Install the addon and save it in your Blender
+  -i, --install         -> Install the addon and save it in your Blender
 `
   )
   process.exit(0)
