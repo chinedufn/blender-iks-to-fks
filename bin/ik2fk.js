@@ -37,7 +37,7 @@ Options
 
 // If the user wants to intall the addon we run a script that installs the addon,
 // enables it and then saves their user preferences
-if (argv.i || argv['install-blender']) {
+if (argv.i || argv['install']) {
   var addonInstallScript = path.resolve(__dirname, './install-addon.py')
   cp.execSync(
     `blender --background --python ${addonInstallScript}`,
