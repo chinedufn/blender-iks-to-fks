@@ -1,3 +1,7 @@
+## 1.4.2
+
+- Fix issue where we weren't deleting all of the old keyframes
+
 ## 1.3.4
 
 - If you have not selected a mesh we will automatically select the first mesh that we find that has an armature
