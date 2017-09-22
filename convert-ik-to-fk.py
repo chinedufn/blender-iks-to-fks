@@ -153,7 +153,10 @@ class ConvertIKToFK(bpy.types.Operator):
             if keyframes == []:
                  continue
 
-            # Now we bake all of our keyframes and remove our constraints
+            # Keyframes might not always be in order so we sort them
+            keyframes.sort()
+
+            # Now we bake all of our keyframes and remove our copy transform constraints
             bpy.ops.nla.bake(frame_start=keyframes[0], frame_end=keyframes[-1], only_selected=True, visual_keying=True, clear_constraints=True, use_current_action=True, bake_types={'POSE'})
 
             # Bake adds extra keyframes, so we delete any keyframes that did not previously exist

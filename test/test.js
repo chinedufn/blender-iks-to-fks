@@ -38,33 +38,46 @@ test('Create a second armature', function (t) {
 // are then we know that our second mesh is in the same position as our first mesh at the keyframe that we rendered.
 // Which means that the two meshes share the same animation.
 test('Old and new armature have same animations', function (t) {
-  t.plan(1)
+  // TODO: Combine these two arrays into an object {legBlendFile: 10}
+  var filesToTest = [
+    legBlendFile
+  ]
+  var framesToRender = [
+    10
+  ]
 
-  var bothImagesRendered
-  var beforeFile = path.resolve(__dirname, './before')
-  var afterFile = path.resolve(__dirname, './after')
+  t.plan(filesToTest.length)
 
-  // Render our model without converting it into FK
-  cp.exec(
-    `blender -b ${legBlendFile} --render-output ${beforeFile} --render-frame 10 --render-format PNG -noaudio`,
-    function (err, stdout, stderr) {
-      if (err) { throw err }
+  // An index for each of our test files on whether or not the before and after have been rendered
+  // i.e. bothImagesRendered[2] = true means the third test file has had its before and after rendered
+  var bothImagesRendered = {}
 
-      compareBeforeAndAfter()
-      bothImagesRendered = true
-    }
-  )
+  filesToTest.forEach(function (testFile, testFileNum) {
+    var beforeFile = path.resolve(__dirname, `./before_${testFileNum}_`)
+    var afterFile = path.resolve(__dirname, `./after_${testFileNum}_`)
 
-  // Render our model after converting it into FK
-  cp.exec(
-    `blender -b ${legBlendFile} --python ${runAddon} --render-output ${afterFile} --render-frame 10 --render-format PNG -noaudio`,
-    function (err, stdout, stderr) {
-      if (err) { throw err }
+    // Render our model without converting it into FK
+    cp.exec(
+      `blender -b ${testFile} --render-output ${beforeFile} --render-frame ${framesToRender[testFileNum]} --render-format PNG -noaudio`,
+      function (err, stdout, stderr) {
+        if (err) { throw err }
 
-      compareBeforeAndAfter()
-      bothImagesRendered = true
-    }
-  )
+        compareBeforeAndAfter(testFileNum)
+        bothImagesRendered[testFileNum] = true
+      }
+    )
+
+    // Render our model after converting it into FK
+    cp.exec(
+      `blender -b ${testFile} --python ${runAddon} --render-output ${afterFile} --render-frame ${framesToRender[testFileNum]} --render-format PNG -noaudio`,
+      function (err, stdout, stderr) {
+        if (err) { throw err }
+
+        compareBeforeAndAfter(testFileNum)
+        bothImagesRendered[testFileNum] = true
+      }
+    )
+  })
 
   /**
    * Compare the rendering with and without our converted FK armature and make sure that they are exactly the same.
@@ -72,11 +85,12 @@ test('Old and new armature have same animations', function (t) {
    * We use the root square mean error between the two images and make sure that it is extremely low
    *  (aka there is no detectable difference between the FK armature and the IK armature)
    */
-  function compareBeforeAndAfter () {
-    t.plan(1)
+  function compareBeforeAndAfter (testFileNum) {
+    var beforeFile = path.resolve(__dirname, `./before_${testFileNum}_`)
+    var afterFile = path.resolve(__dirname, `./after_${testFileNum}_`)
 
-    if (bothImagesRendered) {
-      cp.exec(`compare -metric RMSE ${beforeFile}0010.png ${afterFile}0010.png /dev/null`, function (_, stdout, stderr) {
+    if (bothImagesRendered[testFileNum]) {
+      cp.exec(`compare -metric RMSE ${beforeFile}00${framesToRender[testFileNum]}.png ${afterFile}00${framesToRender[testFileNum]}.png /dev/null`, function (_, stdout, stderr) {
         // Compare will write the comparison to stderr. We parse their
         // It looks like this:
         //  7.31518 (0.000111623)
@@ -85,11 +99,10 @@ test('Old and new armature have same animations', function (t) {
         var rootSquareMeanError = Number(stderr.split('(')[1].split(')')[0])
 
         // Delete our test renderings
-        fs.unlinkSync(`${beforeFile}0010.png`)
-        fs.unlinkSync(`${afterFile}0010.png`)
+        fs.unlinkSync(`${beforeFile}00${framesToRender[testFileNum]}.png`)
+        fs.unlinkSync(`${afterFile}00${framesToRender[testFileNum]}.png`)
 
         t.ok(rootSquareMeanError < 0.0002, 'New mesh and armature have the same animations as the old mesh and armature')
-        t.end()
       })
     }
   }
