@@ -50,6 +50,10 @@ npm install -g blender-iks-to-fks && ik2fk --install
 
 ## Usage
 
+`blender-iks-to-fks` will delete all non-deformation bones when creating your rig, so be sure to uncheck `use deform` for your IK and control bones.
+You can do this in the `Bone` panel while in `Edit Mode`.
+
+
 ### In Blender Window:
 
 1. Select your mesh in Object Mode
