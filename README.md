@@ -69,6 +69,19 @@ You can run this addon via the Blender CLI as part of an automated conversion pr
 blender my-blender-file.blend --python `ik2fk`
 ```
 
+### Via bpy.ops
+
+You can run this addon in the Blender Python Console or via any python script by running
+
+```sh
+bpy.ops.rigging.iktofk()
+```
+
+If the currently active object (`bpy.context.active_object`) is an armature then `blender-iks-to-fks` will run on that
+armature. Otherwise it will run on the first armature that it finds in your Blender scene.
+
+You can convert multiple armatures by iterating over them, setting them at the active object and then calling `bpy.ops.rigging.iktofk()`
+
 ### ik2fk CLI
 
 ```sh
