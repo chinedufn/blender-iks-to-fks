@@ -28,6 +28,12 @@ This Blender Addon is donationware, so please [donate via PayPal](https://paypal
 - Unlike `Bake Action`, `blender-iks-to-fks` **does not create any additional keyframes**
 - Your original mesh remains unmodified, preventing you from accidentally losing / overwriting your work
 
+## Supported Blender Versions
+
+Right now we support Blender 2.79.
+
+We will drop `2.79` support and instead support `2.80` after `2.80` it is fully released.
+
 ## Install
 
 There are two ways to install the addon into Blender.
@@ -117,6 +123,10 @@ Open an issue and lets sort it out!
 Were you lost trying to find a way to convert your bones, but now you're found?
 
 [![Support](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/chinedufn)
+
+## See Also
+
+- [Landon](https://github.com/chinedufn/landon) - tooling for exporting data from Blender such as meshes and armatures.
 
 ## License
 
