@@ -102,7 +102,9 @@ test('Old and new armature have same animations', function (t) {
         fs.unlinkSync(`${beforeFile}00${framesToRender[testFileNum]}.png`)
         fs.unlinkSync(`${afterFile}00${framesToRender[testFileNum]}.png`)
 
-        t.ok(rootSquareMeanError < 0.0002, 'New mesh and armature have the same animations as the old mesh and armature')
+          // In blender 2.79 this was <0.0002 .. In 2.80 we moved it up to <0.0036 ..
+          // After looking at a few more complicated models the before and after still seem to be nearly identical.
+        t.ok(rootSquareMeanError < 0.0036, `Root square mean error between old and new armature ${rootSquareMeanError}.`)
       })
     }
   }
@@ -124,6 +126,7 @@ test('Automatically selects mesh if none selected', function (t) {
       if (err) { throw err }
 
       t.ok(
+        // Original mesh and armature, new mesh and armature, camera = 5 objects total
         stdout.indexOf('The number of objects is: 5') > -1, 'Mesh and armature were automatically detected'
       )
       t.end()

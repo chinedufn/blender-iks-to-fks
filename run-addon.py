@@ -11,7 +11,7 @@ addonFilePath = dir + '/convert-ik-to-fk.py'
 
 # Install and enable the addon temporarily (since we aren't saving our user preferences)
 # We just want to have access to the addon during this blender session
-bpy.ops.wm.addon_install(filepath=addonFilePath)
-bpy.ops.wm.addon_enable(module='convert-ik-to-fk')
+bpy.ops.preferences.addon_install(filepath=addonFilePath)
+bpy.ops.preferences.addon_enable(module='convert-ik-to-fk')
 # Run our addon
 bpy.ops.rigging.iktofk()

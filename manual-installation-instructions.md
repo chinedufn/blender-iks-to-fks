@@ -1,4 +1,4 @@
-[Download the Addon file](https://github.com/chinedufn/blender-iks-to-fks/releases/download/1.3.4/convert-ik-to-fk.py)
+[Download the Addon file](https://github.com/chinedufn/blender-iks-to-fks/releases/download/2.0.0/convert-ik-to-fk.py)
 
 Go to your user preferences in Blender
 

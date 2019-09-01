@@ -13,7 +13,7 @@ The process was manual, tedious and very error prone. To the point where I would
 
 This script automates the IK / Constraint bones -> FK bones conversion process.
 
-It does this by generating a new mesh and FK rig that copy the animations of your original mesh and rig.
+It does this by generating a new mesh and FK rig that copy the animations of your original mesh and rig, but without the IK / Constraints.
 
 ---
 
@@ -30,9 +30,7 @@ This Blender Addon is donationware, so please [donate via PayPal](https://paypal
 
 ## Supported Blender Versions
 
-Right now we support Blender 2.79.
-
-We will drop `2.79` support and instead support `2.80` after `2.80` it is fully released.
+We currently support `Blender 2.80`.
 
 ## Install
 

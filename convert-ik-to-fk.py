@@ -13,7 +13,8 @@
 
 bl_info = {
     "name": "Convert IKs to FKs",
-    "category": "Rigging"
+    "category": "Rigging",
+    "blender": (2, 80, 0)
 }
 
 import bpy
@@ -56,17 +57,16 @@ class ConvertIKToFK(bpy.types.Operator):
 
         # Deselect all objects and then select ONLY our mesh and armature
         for obj in bpy.context.selected_objects:
-            obj.select = False
+            obj.select_set(state = False)
 
         # Select our mesh and armature so that we can duplicate them later
         if originalMesh != None and originalArmature != None:
-            originalMesh.select = True
-            originalArmature.select = True
-
+            originalMesh.select_set(state=True)
+            originalArmature.select_set(state=True)
 
         # An active object is required in order to change into object mode
         if originalArmature != None:
-          bpy.context.scene.objects.active = originalArmature
+          bpy.context.view_layer.objects.active = originalArmature
           bpy.ops.object.mode_set(mode = 'OBJECT')
 
         # Make sure that we have two objects selected (our mesh and armature)
@@ -78,38 +78,38 @@ class ConvertIKToFK(bpy.types.Operator):
 
         # TODO: Check here that mesh is parented to armature
 
-        # Duplicate the selected armature and mesh
-        # From now on we'll be working with our copies so that
-        # we don't modify the user's original armature.
-        # Once we've FK'd the copy they can export it and then
-        # delete it, all the while their original model is unchanged
+        # Duplicate the selected armature and mesh so that if anything were to go wrong there is a backup.
+        # We'll be modifying the original armature and mesh so that we maintain all of the same bone and animation
+        # names instead of having everything in the final FK mesh named $NAME.001.
         bpy.ops.object.duplicate()
-        # The newly created mesh and armature are now selected
-        fkArmature = None
-        # fkMesh = None
-        for obj in list(bpy.context.selected_objects):
-            if obj.type == 'ARMATURE':
-                # our duplicates will be turned into FK by the time we finish our
-                # function so we name them accordingly
-                fkArmature = obj
-            # elif obj.type == 'MESH':
-                # fkMesh = obj
+
+        # Our original armature is now going to become our FK armature.
+        #
+        # Our duplicate (the current active armature) will be exactly like our original armature so that we can
+        # copy it's animations onto our new FK armature.
+        fkArmature = originalArmature
+        duplicateOfOriginalArmature = bpy.context.view_layer.objects.active
+
+        # Deselect all objects and then select ONLY our soon-to-be fkArmature
+        for obj in bpy.context.selected_objects:
+            obj.select_set(state = False)
+
+        fkArmature.select_set(state=True)
+        bpy.context.view_layer.objects.active = fkArmature
 
         # Loop through all pose bones and make sure they are selected. Some of our commands require that the bones be selected
+        bpy.ops.object.mode_set(mode = 'POSE')
         for poseBone in fkArmature.pose.bones:
             poseBone.bone.select = True
 
         # We iterate through the bones in the FK armature and remove all existing bone constraints
-        bpy.ops.object.mode_set(mode = 'POSE')
         for bone in fkArmature.pose.bones:
             for constraint in bone.constraints:
                 bone.constraints.remove(constraint)
 
         # Now we remove all non deform bones from our FK armature,
         # leaving only our FK bones
-        bpy.context.scene.objects.active = fkArmature
         bpy.ops.object.mode_set(mode = 'EDIT')
-        fkArmature.select = True
         for fkEditBone in bpy.data.armatures[fkArmature.name].edit_bones:
             if fkEditBone.use_deform == False:
                 bpy.data.armatures[fkArmature.name].edit_bones.remove(fkEditBone)
@@ -124,7 +124,7 @@ class ConvertIKToFK(bpy.types.Operator):
             bpy.ops.object.mode_set(mode = 'POSE')
             for fkBone in bpy.context.selected_pose_bones:
                 copyTransforms = fkBone.constraints.new('COPY_TRANSFORMS')
-                copyTransforms.target = originalArmature
+                copyTransforms.target = duplicateOfOriginalArmature
                 # the name of the bone in our original armature is the same as the name of our
                 # fkArmature bone the armature was duplicated. Therefore we us `fkBone.name`
                 copyTransforms.subtarget = fkBone.name
@@ -136,7 +136,7 @@ class ConvertIKToFK(bpy.types.Operator):
             bpy.ops.object.mode_set(mode = 'OBJECT')
 
             # Change to the action that we want to mimic
-            originalArmature.animation_data.action = bpy.data.actions.get(actionInfo.name)
+            duplicateOfOriginalArmature.animation_data.action = bpy.data.actions.get(actionInfo.name)
             fkArmature.animation_data.action = bpy.data.actions.get(actionInfo.name)
 
             # Get all of the keyframes that are set for the rigs
