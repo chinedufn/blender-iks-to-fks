@@ -114,15 +114,15 @@ Options
   -i, --install-blender -> Install the addon and save it in your Blender
 ```
 
+## Running Tests
+
+```sh
+npm run test
+```
+
 ## Have an idea? Confused?
 
 Open an issue and lets sort it out!
-
-## Was this helpful?
-
-Were you lost trying to find a way to convert your bones, but now you're found?
-
-[![Support](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/chinedufn)
 
 ## See Also
 
