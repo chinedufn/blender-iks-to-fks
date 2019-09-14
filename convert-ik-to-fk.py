@@ -177,7 +177,6 @@ class ConvertIKToFK(bpy.types.Operator):
                                     bpy.ops.anim.keyframe_delete(override, type='LocRotScale')
 
         # Delete all of the actions that were created when we duplicate our mesh and armature
-        print(originalActionsList)
         for action in bpy.data.actions:
             if action not in originalActionsList:
                 bpy.data.actions.remove(action)
