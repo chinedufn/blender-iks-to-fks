@@ -148,21 +148,21 @@ function testAutomaticSelection (t) {
 
 // Make sure that all of the actions that get created when we duplicate our armature and mesh end up getting removed.
 function testNoNewActionsCreated (t) {
-    const printActionsScript = path.resolve(__dirname, './helper-python-scripts/print-actions-to-stdout.py')
-    let command = `blender ${legBlendFile} --background --python ${runAddon} --python ${printActionsScript}`
+  const printActionsScript = path.resolve(__dirname, './helper-python-scripts/print-actions-to-stdout.py')
+  let command = `blender ${legBlendFile} --background --python ${runAddon} --python ${printActionsScript}`
 
-    cp.exec(
+  cp.exec(
         command,
         function (err, stdout, stderr) {
-            if (err) { throw err }
+          if (err) { throw err }
 
-            console.log(stdout)
-            console.log(stderr)
+          console.log(stdout)
+          console.log(stderr)
 
-            t.ok(
+          t.ok(
                 stdout.indexOf('The number of actions is: 1') > -1, 'No new actions were persisted'
             )
-            t.end()
+          t.end()
         }
     )
 }
