@@ -73,6 +73,8 @@ class ConvertIKToFK(bpy.types.Operator):
         if (len(list(bpy.context.selected_objects)) != 2):
             print('It doesn\'t seem like your file has a mesh with a parent armature')
 
+        originalActionsList = list(bpy.data.actions)
+
         # Duplicate the selected armature and mesh so that if anything were to go wrong there is a backup.
         #
         # Our duplicate (the current active armature) will become our new FK armature
@@ -173,6 +175,12 @@ class ConvertIKToFK(bpy.types.Operator):
                                 if region.type == 'WINDOW':
                                     override = {'window': bpy.context.window, 'screen': screen, 'area': area, 'region': region, 'scene': bpy.context.scene, 'active_object': bpy.context.active_object, 'active_pose_bone': bpy.context.active_pose_bone, 'selected_pose_bones': bpy.context.selected_pose_bones}
                                     bpy.ops.anim.keyframe_delete(override, type='LocRotScale')
+
+        # Delete all of the actions that were created when we duplicate our mesh and armature
+        print(originalActionsList)
+        for action in bpy.data.actions:
+            if action not in originalActionsList:
+                bpy.data.actions.remove(action)
 
         # Go to Object mode so that they can export their new model
         bpy.ops.object.mode_set(mode = 'OBJECT')

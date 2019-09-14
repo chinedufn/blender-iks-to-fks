@@ -20,6 +20,7 @@ test('Blender Ik to FK tests', t => {
   t.test('Creates a second armature', testCreatesSecondArmature)
   t.test('Old and new armature have same animations', testSameAnimations)
   t.test('Automatically selects mesh if none selected', testAutomaticSelection)
+  t.test('No new actions created', testNoNewActionsCreated)
 })
 
 // Our test blender file has 3 objects - a camera, mesh and armature
@@ -124,7 +125,6 @@ function testSameAnimations (t) {
 
 // If you have not selected a mesh that has an armature we will use the first mesh that we find that has an armature
 // This makes everything work right out of the box for blender files that only have one armature and mesh.
-// TODO: We'll still need to figure out how to best handle files with multiple mesh's / armatures
 function testAutomaticSelection (t) {
   t.plan(1)
 
@@ -144,4 +144,25 @@ function testAutomaticSelection (t) {
       t.end()
     }
   )
+}
+
+// Make sure that all of the actions that get created when we duplicate our armature and mesh end up getting removed.
+function testNoNewActionsCreated (t) {
+    const printActionsScript = path.resolve(__dirname, './helper-python-scripts/print-actions-to-stdout.py')
+    let command = `blender ${legBlendFile} --background --python ${runAddon} --python ${printActionsScript}`
+
+    cp.exec(
+        command,
+        function (err, stdout, stderr) {
+            if (err) { throw err }
+
+            console.log(stdout)
+            console.log(stderr)
+
+            t.ok(
+                stdout.indexOf('The number of actions is: 1') > -1, 'No new actions were persisted'
+            )
+            t.end()
+        }
+    )
 }
