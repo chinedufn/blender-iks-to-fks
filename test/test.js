@@ -13,6 +13,8 @@ const unselectedBlendFile = path.resolve(__dirname, './unselected.blend')
 // However, these aren't actually deformation bones - so this file ensures that we've fixed this and that
 // things work when `Deform` is false.
 const bezierCurveBoneHooksDeformOff = path.resolve(__dirname, './bone-hooks.blend')
+// An armature that has multiple child meshes. Used to ensure that we generate a duplicate of each mesh.
+const multipleMeshesForArmature = path.resolve(__dirname, './multiple-meshes-for-armature.blend')
 
 const runAddon = path.resolve(__dirname, '../run-addon.py')
 
@@ -21,6 +23,7 @@ test('Blender Ik to FK tests', t => {
   t.test('Old and new armature have same animations', testSameAnimations)
   t.test('Automatically selects mesh if none selected', testAutomaticSelection)
   t.test('No new actions created', testNoNewActionsCreated)
+  t.test('Armature that has multiple child meshes', testMultipleMeshesForAnArmature)
 })
 
 // Our test blender file has 3 objects - a camera, mesh and armature
@@ -161,6 +164,29 @@ function testNoNewActionsCreated (t) {
 
           t.ok(
                 stdout.indexOf('The number of actions is: 1') > -1, 'No new actions were persisted'
+            )
+          t.end()
+        }
+    )
+}
+
+// Make sure that if an armature has multiple child meshes we duplicate all of them so that all of their vertex
+// groups are set to the new FK armature
+function testMultipleMeshesForAnArmature (t) {
+  t.plan(1)
+
+  var printNumObjectsScript = path.resolve(__dirname, './helper-python-scripts/print-num-objects-to-stdout.py')
+
+    // Run our addon and then verify that the number of objects went from 3 -> 5 because a new armature
+    // and mesh were created
+  cp.exec(
+        `blender ${multipleMeshesForArmature} --background --python ${runAddon} --python ${printNumObjectsScript}`,
+        function (err, stdout, stderr) {
+          if (err) { throw err }
+
+          t.ok(
+                // Original 2 meshes, original armature, new 2 mesh and new armature, camera = 7 objects total
+                stdout.indexOf('The number of objects is: 7') > -1, 'Both meshes were duplicated'
             )
           t.end()
         }

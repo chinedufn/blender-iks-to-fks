@@ -55,19 +55,23 @@ class ConvertIKToFK(bpy.types.Operator):
                     originalArmature = obj.parent
                     break
 
-        # Deselect all objects and then select ONLY our mesh and armature
+        # Deselect all objects and then select ONLY our armature and all of its children
         for obj in bpy.context.selected_objects:
             obj.select_set(state = False)
 
-        # Select our mesh and armature so that we can duplicate them later
         if originalMesh != None and originalArmature != None:
             originalMesh.select_set(state=True)
             originalArmature.select_set(state=True)
 
-        # An active object is required in order to change into object mode
         if originalArmature != None:
+          # An active object is required in order to change into object mode
           bpy.context.view_layer.objects.active = originalArmature
+
           bpy.ops.object.mode_set(mode = 'OBJECT')
+          # Select our mesh and armature so that we can duplicate them later
+          for mesh in originalArmature.children:
+            if mesh.type == 'MESH':
+              mesh.select_set(True)
 
         # Make sure that we have two objects selected (our mesh and armature)
         if (len(list(bpy.context.selected_objects)) != 2):
