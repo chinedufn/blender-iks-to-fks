@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - '6'
+  - '12'
 os: linux
 before_script:
   # https://stackoverflow.com/a/26028597/3701114

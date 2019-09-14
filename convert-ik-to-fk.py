@@ -73,22 +73,18 @@ class ConvertIKToFK(bpy.types.Operator):
         if (len(list(bpy.context.selected_objects)) != 2):
             print('It doesn\'t seem like your file has a mesh with a parent armature')
 
-        # This ensures that the order that the mesh and armature are selected does
-        # not cause any issues
-
-        # TODO: Check here that mesh is parented to armature
-
         # Duplicate the selected armature and mesh so that if anything were to go wrong there is a backup.
-        # We'll be modifying the original armature and mesh so that we maintain all of the same bone and animation
-        # names instead of having everything in the final FK mesh named $NAME.001.
-        bpy.ops.object.duplicate()
-
-        # Our original armature is now going to become our FK armature.
         #
-        # Our duplicate (the current active armature) will be exactly like our original armature so that we can
-        # copy it's animations onto our new FK armature.
-        fkArmature = originalArmature
+        # Our duplicate (the current active armature) will become our new FK armature
+        #
+        # It's important to use our duplicate because our original armature might have special bones set up such as
+        # boke hooks for a bezier curve. Trying to duplicate all of this onto a new armature would be difficult since
+        # we'd need to also duplicate these bezier curves / bone hook data.
+        bpy.ops.object.duplicate()
         duplicateOfOriginalArmature = bpy.context.view_layer.objects.active
+
+        ikArmature = originalArmature
+        fkArmature = duplicateOfOriginalArmature
 
         # Deselect all objects and then select ONLY our soon-to-be fkArmature
         for obj in bpy.context.selected_objects:
@@ -124,7 +120,7 @@ class ConvertIKToFK(bpy.types.Operator):
             bpy.ops.object.mode_set(mode = 'POSE')
             for fkBone in bpy.context.selected_pose_bones:
                 copyTransforms = fkBone.constraints.new('COPY_TRANSFORMS')
-                copyTransforms.target = duplicateOfOriginalArmature
+                copyTransforms.target = ikArmature
                 # the name of the bone in our original armature is the same as the name of our
                 # fkArmature bone the armature was duplicated. Therefore we us `fkBone.name`
                 copyTransforms.subtarget = fkBone.name
@@ -136,7 +132,7 @@ class ConvertIKToFK(bpy.types.Operator):
             bpy.ops.object.mode_set(mode = 'OBJECT')
 
             # Change to the action that we want to mimic
-            duplicateOfOriginalArmature.animation_data.action = bpy.data.actions.get(actionInfo.name)
+            ikArmature.animation_data.action = bpy.data.actions.get(actionInfo.name)
             fkArmature.animation_data.action = bpy.data.actions.get(actionInfo.name)
 
             # Get all of the keyframes that are set for the rigs
