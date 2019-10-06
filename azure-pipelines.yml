@@ -17,5 +17,7 @@ steps:
 
 - script: |
     npm install
+    apt-get update
+    apt-get install imagemagick
     xfvb-run npm run test
   displayName: 'npm install and xvfb0test'
