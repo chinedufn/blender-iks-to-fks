@@ -8,16 +8,8 @@ pool:
 
 container: chinedufn/blender-rustlang:latest
 
-# TODO: Remove once we port test suite to Rust
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '12.x'
-  displayName: 'Install Node.js'
-
 - script: |
-    npm install
     apt-get update
     apt-get install imagemagick
-    xfvb-run npm run test
+    xfvb-run cargo test --all
   displayName: 'npm install and xvfb0test'
