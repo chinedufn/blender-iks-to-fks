@@ -1,4 +1,4 @@
-blender-iks-to-fks [![npm version](https://badge.fury.io/js/blender-iks-to-fks.svg)](http://badge.fury.io/js/blender-iks-to-fks) [![Build Status](https://travis-ci.org/chinedufn/blender-iks-to-fks.svg?branch=master)](https://travis-ci.org/chinedufn/blender-iks-to-fks)
+blender-iks-to-fks [![npm version](https://badge.fury.io/js/blender-iks-to-fks.svg)](http://badge.fury.io/js/blender-iks-to-fks) [![Build Status](https://dev.azure.com/frankienwafili/blender-iks-to-fks/_apis/build/status/chinedufn.blender-iks-to-fks?branchName=master)](https://dev.azure.com/frankienwafili/blender-iks-to-fks/_build/latest?definitionId=1&branchName=master)
 ===========
 
 > A Blender Addon that takes a mesh and armature that use IKs and other non-deformation bones and

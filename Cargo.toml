@@ -1,0 +1,11 @@
+[package]
+name = "blender-iks-to-fks"
+version = "0.0.1"
+authors = ["Chinedu Francis Nwafili <frankie.nwafili@gmail.com>"]
+
+[workspace]
+members = [
+]
+
+[dev-dependencies]
+tempfile = "3.1.0"

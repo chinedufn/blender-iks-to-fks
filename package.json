@@ -10,7 +10,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "standard && tape test/**/*.js",
+    "test": "standard",
     "fix": "standard --fix"
   },
   "repository": {
