@@ -8,6 +8,7 @@ pool:
 
 container: chinedufn/blender-rustlang:latest
 
+steps:
 - script: |
     apt-get update
     apt-get install imagemagick
