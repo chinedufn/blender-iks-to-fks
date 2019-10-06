@@ -1,0 +1,15 @@
+trigger:
+  branches:
+    include:
+      - '*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+container: chinedufn/blender-rustlang:latest
+
+- script: |
+    apt-get update
+    apt-get install imagemagick
+    xfvb-run cargo test --all
+  displayName: 'cargo test --all'
