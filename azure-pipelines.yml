@@ -1,0 +1,21 @@
+trigger:
+  branches:
+    include:
+      - '*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+# FIXME: Create and use rustlang-blender:latest and install the latest stable and nightly Rust along with Blender 2.8
+container: chinedufn/akigi:latest
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '12.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run test
+  displayName: 'npm install and test'
