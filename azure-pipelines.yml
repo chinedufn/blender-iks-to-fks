@@ -10,7 +10,6 @@ container: chinedufn/blender-rustlang:latest
 
 steps:
 - script: |
-    apt-get update
-    apt-get install imagemagick
+    # TODO: Our tests that try to render aren't working in our docker image but pass locally
     xfvb-run cargo test --all
   displayName: 'cargo test --all'
