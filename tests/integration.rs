@@ -35,7 +35,7 @@ fn before_after_test_case_leg() {
     BeforeAfterTestCase {
         blend_file: leg_blend(),
         frame_to_render: 10,
-        max_error: 0.0036,
+        max_error: 0.0051,
     }
     .test();
 }
@@ -138,6 +138,9 @@ impl BeforeAfterTestCase {
         let mut before = Command::new("blender")
             .arg(&self.blend_file)
             .arg("--background")
+            // Rendering a frame in Eevee isn't working headless in Blender 2.80 when
+            // you don't have a display as of October 2019 (i.e. in CI)
+            .args(&["-E", "CYCLES"])
             .args(&["--python", run_addon_py().to_str().unwrap()])
             .args(&["--render-output", before_img.to_str().unwrap()])
             .args(&[
@@ -153,6 +156,9 @@ impl BeforeAfterTestCase {
         let mut after = Command::new("blender")
             .arg(&self.blend_file)
             .arg("--background")
+            // Rendering a frame in Eevee isn't working headless in Blender 2.80 when
+            // you don't have a display as of October 2019 (i.e. in CI)
+            .args(&["-E", "CYCLES"])
             .args(&["--render-output", after_img.to_str().unwrap()])
             .args(&[
                 "--render-frame",

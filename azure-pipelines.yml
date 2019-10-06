@@ -11,5 +11,5 @@ container: chinedufn/blender-rustlang:latest
 steps:
 - script: |
     # TODO: Our tests that try to render aren't working in our docker image but pass locally
-    xfvb-run cargo test --all
+    xvfb-run cargo test --all
   displayName: 'cargo test --all'
