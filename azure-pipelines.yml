@@ -12,4 +12,4 @@ container: chinedufn/blender-rustlang:latest
     apt-get update
     apt-get install imagemagick
     xfvb-run cargo test --all
-  displayName: 'npm install and xvfb0test'
+  displayName: 'cargo test --all'
