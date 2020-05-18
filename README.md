@@ -2,7 +2,7 @@
 
 This repository contains versions at and before `2.0.3`.
 
-All versions after that live in the [landon repository](https://github.com/chinedufn/landon).
+All versions after that live in the [landon repository](https://github.com/chinedufn/landon/tree/master/crates/iks-to-fks).
 
 
 ---
